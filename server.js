@@ -11,8 +11,6 @@ const PORT = process.env.PORT || 3000
 app.use(express.json()) //json data CRUD
 app.use(express.urlencoded({extended: false})) //form data
 
-//routes
-
 app.use('/api/products', productRoute);
 
 app.get('/', (req, res) => {

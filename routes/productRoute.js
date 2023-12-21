@@ -2,6 +2,9 @@ const express = require('express');
 const Product = require('../models/productModel')
 const {getProducts, getProduct, createProduct, updateProduct, deleteProduct} = require('../controllers/productController')
 
+//add prod validation middleware
+const {addUserValidation} = require('../validations/Validate')
+
 const router = express.Router();
 
 //get all products
@@ -11,7 +14,7 @@ router.get('/', getProducts);
 router.get('/:id', getProduct);
 
 //create a new product
-router.post('/', createProduct);
+router.post('/', addUserValidation, createProduct);
 
 // update a prod
 router.put('/:id', updateProduct);

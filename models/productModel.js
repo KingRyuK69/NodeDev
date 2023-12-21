@@ -15,16 +15,16 @@ const productSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        image: {
+        email: {
             type: String,
-            required: false,
+            required: [true, 'Please enter an email'],
+            unique: true
         }
     },
     {
         timestamps: true
     }
 )
-
 
 const Product = mongoose.model('Product', productSchema)
 

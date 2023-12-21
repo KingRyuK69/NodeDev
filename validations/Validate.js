@@ -1,12 +1,27 @@
 const joi = require('joi');
 
+const customMailValidator = (value, helpers) => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@shyamsteel.com$/;
+    if (!emailPattern.test(value)) {
+        return helpers.error('custom.validation.error', { value: value });
+    }
+    return value;
+};
+
+try {
+    console.log(customMailValidator('sohom179@gmail.com'));
+} catch (error) {
+    console.error(error.message);
+}
+
 const Schema = {
     prod: joi.object({
         name: joi.string().max(100).required(),
         quantity: joi.number().integer().min(1).message("Can't exceed limit").max(99999).message("Can't exceed limit").required(),
         price: joi.number().integer().min(1).message("Can't exceed limit").max(9999).message("Can't exceed limit").required(),
         image: joi.string().required(),
-        email: joi.string().email().required()
+        // email: joi.string().email().regex(/^[a-zA-Z0-9._%+-]+@shyamsteel.com$/).required()
+        email: joi.string().email().custom(customMailValidator).required()
     })
 }
 

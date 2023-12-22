@@ -1,4 +1,5 @@
 const Product = require('../models/productModel')
+const multer = require('multer')
 
 //get all product
 const getProducts = async(req, res) => {
@@ -69,10 +70,37 @@ const deleteProduct = async(req, res) =>{
     }
 }
 
+//upload file
+
+const uploadFile = async(req, res) => {
+  try {
+      if(!req.file){
+          return res.status(400).json({message: "No file uploaded"})
+      }
+      res.status(200).json({message: "Single File Uploaded", file: req.file})
+
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+}
+
+const fileStorageEngine = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./images")
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '--' + file.originalname)
+  }
+});
+
+const upload = multer({storage: fileStorageEngine});
+
 module.exports = {
     getProducts,
     getProduct,
     createProduct, 
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    uploadFile,
+    upload 
 }

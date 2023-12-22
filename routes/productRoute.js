@@ -3,7 +3,7 @@ const Product = require('../models/productModel')
 const {getProducts, getProduct, createProduct, updateProduct, deleteProduct} = require('../controllers/productController')
 
 //add prod validation middleware
-const {addUserValidation} = require('../validations/Validate')
+const {addUserValidation} = require('../validations/eValidate')
 
 const router = express.Router();
 

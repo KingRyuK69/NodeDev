@@ -6,7 +6,7 @@ const productRoute = require('./routes/productRoute');
 const app = express()
 
 const MONGO_URL = process.env.MONGO_URL
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 8000
 
 app.use(express.json()) //json data CRUD
 app.use(express.urlencoded({extended: false})) //form data
@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 
 app.get('/blog', (req, res) => {
     res.send('BlogPost it is')
-  })
+})
 
 mongoose.set("strictQuery", false)
 mongoose.connect(MONGO_URL)

@@ -1,5 +1,13 @@
 const joi = require('joi');
 
+// const CM = (value, helpers) => {
+//     const emailPattern = /^[a-zA-Z0-9._%+-]+@o365hq.com$/;
+//     if (value != "emailPattern") {
+//         return new Error("Wrong Input");
+//     }
+//     return value;
+// }
+
 const customMailValidator = (value, helpers) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@shyamsteel.com$/;
     if (!emailPattern.test(value)) {

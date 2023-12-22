@@ -71,7 +71,6 @@ const deleteProduct = async(req, res) =>{
 }
 
 //upload file
-
 const uploadFile = async(req, res) => {
   try {
       if(!req.file){

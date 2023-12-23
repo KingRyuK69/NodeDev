@@ -8,6 +8,8 @@ const {
   deleteProduct,
   uploadFile,
   getFile,
+  encodeBase64Img,
+  decodeBase64Img,
 } = require("../controllers/productController");
 
 //add prod validation middleware
@@ -35,5 +37,11 @@ router.delete("/:id", deleteProduct);
 
 //upload a file
 router.post("/single", upload.single("image"), uploadFile);
+
+//encode img
+router.post("/encode", upload.single("image"), encodeBase64Img);
+
+//decode img
+router.post("/decode", decodeBase64Img);
 
 module.exports = router;

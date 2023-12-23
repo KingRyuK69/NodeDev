@@ -2,6 +2,8 @@ const Product = require("../models/productModel");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const uploadF = multer({ dest: "uploads/" });
+const base64ToImage = require("base64-to-image");
 
 //get all product
 const getProducts = async (req, res) => {
@@ -121,6 +123,50 @@ const getFile = async (req, res) => {
   }
 };
 
+//encode base64 img
+const encodeBase64Img = async (req, res) => {
+  try {
+    const imagePath = req.file.path;
+    const encodedImage = await base64.base64Sync(imagePath);
+
+    res.status(200).json({ base64Image: encodedImage });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//decode base64 img
+const decodeBase64Img = async (req, res) => {
+  try {
+    const base64String = req.body.base64Image;
+    const filename = req.body.filename;
+    const ext = path.extname(filename);
+    const destPath = path.join("images", filename);
+
+    base64.img(
+      base64String,
+      path.dirname(destPath),
+      true,
+      async function (err) {
+        if (err) {
+          throw new Error("Failed to save image");
+        }
+        res.status(200).json({ message: "Image decoded successfully" });
+      }
+    );
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//img size checker
+const uploadImg = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
+
 module.exports = {
   getProducts,
   getProduct,
@@ -130,4 +176,6 @@ module.exports = {
   uploadFile,
   upload,
   getFile,
+  encodeBase64Img,
+  decodeBase64Img,
 };

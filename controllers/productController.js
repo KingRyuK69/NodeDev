@@ -112,7 +112,7 @@ const getFile = async (req, res) => {
     const filePath = path.join("images", filename);
 
     if (fs.existsSync(filePath)) {
-      res.status(200).json({ message: "Single File Found", file: filename });
+      res.status(200).download(filePath, filename);
     } else {
       throw new Error("File not found");
     }

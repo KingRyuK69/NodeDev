@@ -3,7 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const uploadF = multer({ dest: "uploads/" });
-const base64ToImage = require("base64-to-image");
+const base64 = require("base64-img");
 
 //get all product
 const getProducts = async (req, res) => {
@@ -119,7 +119,7 @@ const getFile = async (req, res) => {
       throw new Error("File not found");
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(404).json({ message: error.message });
   }
 };
 
@@ -138,34 +138,22 @@ const encodeBase64Img = async (req, res) => {
 //decode base64 img
 const decodeBase64Img = async (req, res) => {
   try {
-    const base64String = req.body.base64Image;
+    const base64String = req.body.image;
     const filename = req.body.filename;
-    const ext = path.extname(filename);
-    const destPath = path.join("images", filename);
-
-    base64.img(
-      base64String,
-      path.dirname(destPath),
-      true,
-      async function (err) {
-        if (err) {
-          throw new Error("Failed to save image");
-        }
-        res.status(200).json({ message: "Image decoded successfully" });
+    // const ext = path.extname(filename);
+    // const destPath = path.join("images", filename);
+    console.log("base64String", base64String);
+    base64.img(base64String, "./images", true, async function (err) {
+      if (err) {
+        throw new Error("Failed to save image");
       }
-    );
+      res.status(200).json({ message: "Image decoded successfully" });
+    });
   } catch (error) {
+    // console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
-
-//img size checker
-const uploadImg = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 5 * 1024 * 1024,
-  },
-});
 
 module.exports = {
   getProducts,

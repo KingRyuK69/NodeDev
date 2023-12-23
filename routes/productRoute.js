@@ -10,6 +10,7 @@ const {
   getFile,
   encodeBase64Img,
   decodeBase64Img,
+  getImage,
 } = require("../controllers/productController");
 
 //add prod validation middleware
@@ -43,5 +44,8 @@ router.post("/encode", upload.single("image"), encodeBase64Img);
 
 //decode img
 router.post("/decode", decodeBase64Img);
+
+//show decoded image
+router.post("/get-file/:filename", getImage);
 
 module.exports = router;

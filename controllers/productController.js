@@ -140,18 +140,42 @@ const decodeBase64Img = async (req, res) => {
   try {
     const base64String = req.body.image;
     const filename = req.body.filename;
-    // const ext = path.extname(filename);
-    // const destPath = path.join("images", filename);
-    console.log("base64String", base64String);
-    base64.img(base64String, "./images", true, async function (err) {
-      if (err) {
-        throw new Error("Failed to save image");
+    base64.img(
+      base64String,
+      "./uploads",
+      filename,
+      async function (err, filepath) {
+        if (err) {
+          throw new Error("Failed to save image");
+        }
+        // Convert the relative path to an absolute path
+        const absolutePath = path.resolve(filepath);
+        // Check if the file exists before sending it
+        if (fs.existsSync(absolutePath)) {
+          res.sendFile(absolutePath);
+        } else {
+          throw new Error("File not found");
+        }
       }
-      res.status(200).json({ message: "Image decoded successfully" });
-    });
+    );
   } catch (error) {
-    // console.log(error);
     res.status(500).json({ message: error.message });
+  }
+};
+
+//get decoded image
+const getImage = async (req, res) => {
+  try {
+    const filename = req.params.filename;
+    const filePath = path.join("uploads", filename);
+
+    if (fs.existsSync(filePath)) {
+      res.status(200).download(filePath, filename);
+    } else {
+      throw new Error("File not found");
+    }
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 };
 
@@ -166,4 +190,5 @@ module.exports = {
   getFile,
   encodeBase64Img,
   decodeBase64Img,
+  getImage,
 };

@@ -1,10 +1,10 @@
-const Product = require("../models/productModel");
+const { Product, Users } = require("../models/productModel");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const uploadF = multer({ dest: "uploads/" });
 const base64 = require("base64-img");
-
+const bcrypt = require("bcrypt");
 //get all product
 const getProducts = async (req, res) => {
   try {
@@ -179,6 +179,32 @@ const getImage = async (req, res) => {
   }
 };
 
+const signup = async (req, res) => {
+  const data = {
+    email: req.body.email,
+    password: req.body.password,
+  };
+
+  try {
+    const existinguser = await Users.findOne({ email: data.email });
+
+    if (existinguser) {
+      return res.status(400).json({ message: "User already exists" });
+    } else {
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(data.password, saltRounds);
+
+      data.password = hashedPassword;
+
+      const userdata = await Users.create(data);
+      return res.status(201).json(userdata);
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getProducts,
   getProduct,
@@ -191,4 +217,5 @@ module.exports = {
   encodeBase64Img,
   decodeBase64Img,
   getImage,
+  signup,
 };

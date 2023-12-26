@@ -11,6 +11,7 @@ const {
   encodeBase64Img,
   decodeBase64Img,
   getImage,
+  signup,
 } = require("../controllers/productController");
 
 //add prod validation middleware
@@ -47,5 +48,8 @@ router.post("/decode", decodeBase64Img);
 
 //show decoded image
 router.post("/get-file/:filename", getImage);
+
+//user signup
+router.post("/signup", signup);
 
 module.exports = router;

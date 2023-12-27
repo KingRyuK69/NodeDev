@@ -179,6 +179,7 @@ const getImage = async (req, res) => {
   }
 };
 
+//user registration
 const signup = async (req, res) => {
   const data = {
     email: req.body.email,
@@ -205,6 +206,28 @@ const signup = async (req, res) => {
   }
 };
 
+//user login
+const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await Users.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    return res.status(200).json({ message: "User authenticated" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getProducts,
   getProduct,
@@ -218,4 +241,5 @@ module.exports = {
   decodeBase64Img,
   getImage,
   signup,
+  login,
 };

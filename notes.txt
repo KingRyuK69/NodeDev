@@ -1,0 +1,5 @@
+user login, registration, profile updation, profile image upload, user active/deactive check, user delete, get many users, user listing
+
+same thing do with my sql
+
+mongoDb aggregation, fetch realtion (same values)/ mysql association using sequalizew

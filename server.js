@@ -14,8 +14,6 @@ app.use(express.urlencoded({ extended: false })); //form data
 
 app.use("/api/products", productRoute);
 
-// app.set("view engine", "ejs");
-
 app.get("/", (req, res) => {
   res.send("Hello NODE API");
   // res.json({ message: "Welcome to my Node app" });
